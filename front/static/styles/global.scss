@@ -1,0 +1,17 @@
+* {
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}

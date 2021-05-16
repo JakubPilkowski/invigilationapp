@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Socket-Test</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+            var socket = io();
+            socket.on('connect', function() {
+                socket.emit('my event', {data: 'connected to the SocketServer...'});
+                socket.emit('bi directional', {data: 'why not'}, (arg) => {
+                    console.log("czy tutaj jestem");
+                console.log(arg);
+                });
+            });
+            socket.onAny((event, ...args) => {
+            console.log(`got ${event}`);
+            });
+    </script>
+</head>
+<body style="background-color:white;">
+</body>
+</html>

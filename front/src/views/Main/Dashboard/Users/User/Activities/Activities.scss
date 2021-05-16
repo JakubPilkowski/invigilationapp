@@ -1,0 +1,47 @@
+.Activities {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 0;
+
+  &__activity {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+  }
+}
+
+.Activities-anim-enter {
+  overflow-y: scroll;
+  height: 0;
+}
+
+.Activities-anim-enter-active {
+  height: 140px;
+  transition: height 300ms;
+}
+
+.Activities-anim-enter-done {
+  overflow-y: scroll;
+  height: 140px;
+}
+
+.Activities-anim-exit {
+  overflow-y: scroll;
+  height: 140px;
+}
+
+.Activities-anim-exit-active {
+  height: 0;
+  transition: height 300ms;
+}
+
+.Activities-anim-exit-done {
+  overflow-y: unset;
+  height: 0;
+}

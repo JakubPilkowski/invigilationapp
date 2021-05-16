@@ -1,0 +1,32 @@
+.Users {
+  width: 400px;
+  height: 100vh;
+  max-height: 100vh;
+  border-left: 2px solid $primary_light;
+  box-sizing: border-box;
+  // padding: 20px;
+  overflow-y: visible;
+  overflow-x: hidden;
+
+  &__header {
+    position: relative;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid $primary_light;
+
+    h2 {
+      font-family: Roboto, sans-serif;
+      font-weight: 400;
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    .header__logout {
+      position: absolute;
+      right: 10px;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.ImageFilters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & h4 {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+  }
+
+  &__button {
+    padding: 0;
+    background-color: transparent;
+    outline: none;
+    border: none;
+  }
+
+  &__filter {
+    width: 36px;
+    height: 36px;
+    margin: 5px;
+    box-sizing: border-box;
+    transition: border-color 200ms;
+    border-color: transparent;
+    border-width: 2px;
+    border-style: solid;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__filter--selected {
+    border-color: $secondary_light;
+  }
+}

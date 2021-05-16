@@ -1,0 +1,39 @@
+.Dogs {
+  padding-top: 50px;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  max-height: calc(100vh - 60px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  &__grid {
+    width: 820px;
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    padding-bottom: 50px;
+    margin: -10px;
+
+    & button {
+      flex: 0 0 400px;
+      margin: 5px;
+      padding: 0;
+      border: none;
+      outline: none;
+      background-color: transparent;
+    }
+
+    & button:hover {
+      box-shadow: 0 0 0 2px $primary_main;
+    }
+
+    .grid__dog {
+      width: 400px;
+      height: 400px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+  }
+}
