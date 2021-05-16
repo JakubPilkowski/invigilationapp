@@ -5,6 +5,7 @@ import http from "http";
 import bcrypt from "bcrypt";
 import socketioAuth from "socketio-auth";
 import jwt from "jsonwebtoken";
+import { secretToken } from "./secretToken.js";
 
 const server = http.createServer();
 server.listen(8000);
@@ -25,8 +26,6 @@ const pool = new pg.Pool({
     "postgresql://invigilationappadmin:2DVetWjJg5st@localhost:5432/invigilationapp",
 });
 
-// 260c9735448fb4ab63a1e97a9e613b6e85f34af10142952945ddd997a5dfc497fa42651ff0f8966f48c4360c296bdf5642ca13cd8f92e9fc24bdab4cc9069fa0
-
 const authenticate = async (client, data, callback) => {
   const { username, email, password, register } = data;
 
@@ -37,15 +36,27 @@ const authenticate = async (client, data, callback) => {
         .then((res) => {
           if (res.rows.length == 0) {
             bcrypt.hash(password, 10, (err, hash) => {
-              console.log(hash);
               pool
                 .query(
                   `INSERT INTO users (username, email, password) values('${username}', '${email}', '${hash}') RETURNING *`
                 )
                 .then((res) => {
-                  console.log(res);
-                  // const token = jwt.sign()
-                  callback(null, true);
+                  const user = res.rows[0];
+                  const token = jwt.sign(user.id, secretToken);
+                  pool
+                    .query(
+                      `INSERT INTO statuses (user_id, status, interaction_time) values ('${
+                        user.id
+                      }', 'Aktywny', '${new Date().toISOString()}')`
+                    )
+                    .then(() => {
+                      callback(null, {
+                        token,
+                        id: user.id,
+                        email: user.email,
+                      });
+                    })
+                    .catch((err) => console.log(err));
                 })
                 .catch((err) => console.log(err));
             });
@@ -56,15 +67,33 @@ const authenticate = async (client, data, callback) => {
         .catch((err) => console.log(err));
     } else {
       pool
-        .query(`SELECT password from users where email = ${email}`)
+        .query(`SELECT * from users where email = '${email}'`)
         .then((res) => {
-          console.log(res.rows);
-          // bcrypt.compare(password, )
+          const user = res.rows[0];
+
+          bcrypt.compare(password, user.password, (err, same) => {
+            if (same) {
+              pool
+                .query(
+                  `UPDATE statuses SET status = 'Aktywny', interaction_time = '${new Date().toISOString()}'  where user_id = '${
+                    user.id
+                  }'`
+                )
+                .then(() => {
+                  const token = jwt.sign(user.id, secretToken);
+                  callback(null, {
+                    token,
+                    id: user.id,
+                    email: user.email,
+                  });
+                })
+                .catch((err) => console.log(err));
+            }
+          });
         })
         .catch((err) => {
           console.log(err);
         });
-      callback(null, true);
     }
   } catch (err) {
     console.log(err);

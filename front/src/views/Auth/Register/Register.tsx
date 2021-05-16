@@ -53,10 +53,10 @@ const Register = () => {
       socket?.on('authenticated', (data) => {
         console.log(data);
         setIsDisabled(false);
-        // localStorage.setItem('userId', data?.data?.id);
-        // localStorage.setItem('email', email);
-        // localStorage.setItem('token', data?.data?.auth_token);
-        // history.replace('/');
+        localStorage.setItem('userId', data?.id);
+        localStorage.setItem('email', data?.email);
+        localStorage.setItem('token', data?.token);
+        history.replace('/');
       });
       socket?.on('unathorized', (err) => {
         console.log(err);

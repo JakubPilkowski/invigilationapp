@@ -1,14 +1,16 @@
 import React, { memo, useCallback, useContext, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
+
+import { SocketContext } from 'utils/SocketProvider';
+
 import useCredential from 'hooks/useCredential';
+
 import ThemedCard from 'components/ThemedCard';
 import ThemedTextField from 'components/ThemedTextField';
 import FancyHeading from 'components/FancyHeading';
 import FancyButton from 'components/FancyButton/FancyButton';
 
 import './Login.scss';
-import { AxiosContext } from 'utils/AxiosProvider';
-import { useHistory, useLocation } from 'react-router';
-import { SocketContext } from 'utils/SocketProvider';
 
 type From = {
   from: { pathname: string };
@@ -50,10 +52,10 @@ const Login = () => {
       socket?.on('authenticated', (data) => {
         console.log(data);
         setIsDisabled(false);
-        // localStorage.setItem('userId', data?.data?.id);
-        // localStorage.setItem('email', email);
-        // localStorage.setItem('token', data?.data?.auth_token);
-        // history.replace(from);
+        localStorage.setItem('userId', data?.data?.id);
+        localStorage.setItem('email', email);
+        localStorage.setItem('token', data?.data?.auth_token);
+        history.replace(from);
       });
       socket?.on('unathorized', (err) => {
         console.log(err);
