@@ -4,8 +4,8 @@ import { Redirect, Route, RouteProps } from 'react-router';
 const AuthorizeRoute = ({ children, ...props }: RouteProps) => (
   <Route
     {...props}
-    render={({ location }) =>
-      localStorage.getItem('token') ? (
+    render={({ location }) => {
+      return localStorage.getItem('token') ? (
         children
       ) : (
         <Redirect
@@ -14,9 +14,9 @@ const AuthorizeRoute = ({ children, ...props }: RouteProps) => (
             state: { from: location },
           }}
         />
-      )
-    }
-  ></Route>
+      );
+    }}
+  />
 );
 
 export default memo(AuthorizeRoute);

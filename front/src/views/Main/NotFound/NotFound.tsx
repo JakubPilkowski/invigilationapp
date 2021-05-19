@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 
 const NotFound = () => {
-  return <div>Not found</div>;
+  return <div>Oj gdzieś Ty trafił</div>;
 };
 
 export default memo(NotFound);

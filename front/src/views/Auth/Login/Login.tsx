@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useContext, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 
-import { SocketContext } from 'utils/SocketProvider';
+import { AxiosContext } from 'utils/AxiosProvider';
 
 import useCredential from 'hooks/useCredential';
 
@@ -11,6 +11,7 @@ import FancyHeading from 'components/FancyHeading';
 import FancyButton from 'components/FancyButton/FancyButton';
 
 import './Login.scss';
+import { AxiosResponse } from 'axios';
 
 type From = {
   from: { pathname: string };
@@ -20,8 +21,8 @@ const Login = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const location = useLocation<From>();
   const history = useHistory();
-  const socket = useContext(SocketContext);
-  const { from } = location.state || { from: { pathname: '/' } };
+  const axios = useContext(AxiosContext);
+  const { from } = location.state || { from: { pathname: '/cats' } };
   const handleError = useCallback(
     (isError: boolean) => {
       setIsDisabled(isError);
@@ -48,19 +49,18 @@ const Login = () => {
         email,
         password,
       };
-      socket?.emit('authentication', request);
-      socket?.on('authenticated', (data) => {
-        console.log(data);
-        setIsDisabled(false);
-        localStorage.setItem('userId', data?.data?.id);
-        localStorage.setItem('email', email);
-        localStorage.setItem('token', data?.data?.auth_token);
-        history.replace(from);
-      });
-      socket?.on('unathorized', (err) => {
-        console.log(err);
-        setIsDisabled(false);
-      });
+      axios
+        .post<{ id: number; email: string; token: string }>('/login', request)
+        .then((res: AxiosResponse<{ id: number; email: string; token: string }>) => {
+          setIsDisabled(false);
+          localStorage.setItem('userId', res?.data.id.toString());
+          localStorage.setItem('email', res?.data.email);
+          localStorage.setItem('token', res?.data.token);
+          history.replace(from);
+        })
+        .catch(() => {
+          setIsDisabled(false);
+        });
     }
   };
 

@@ -4,15 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'globals/theme';
 import Main from 'routs/Main';
-import SocketProvider from 'utils/SocketProvider';
+import AxiosProvider from 'utils/AxiosProvider';
 
 ReactDom.render(
   <BrowserRouter basename="">
-    <SocketProvider>
+    <AxiosProvider url="http://localhost:3000">
       <ThemeProvider theme={theme}>
         <Main />
       </ThemeProvider>
-    </SocketProvider>
+    </AxiosProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

@@ -1,7 +1,8 @@
 import React, { memo, useCallback, useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
-import { SocketContext } from 'utils/SocketProvider';
+import { AxiosContext } from 'utils/AxiosProvider';
 
 import useCredential from 'hooks/useCredential';
 
@@ -14,7 +15,8 @@ import './Register.scss';
 
 const Register = () => {
   const [isDisabled, setIsDisabled] = useState(false);
-  const socket = useContext(SocketContext);
+
+  const axios = useContext(AxiosContext);
   const history = useHistory();
   const handleError = useCallback(
     (isError: boolean) => {
@@ -47,23 +49,22 @@ const Register = () => {
         username,
         email,
         password,
-        register: true,
       };
-      socket?.emit('authentication', request);
-      socket?.on('authenticated', (data) => {
-        console.log(data);
-        setIsDisabled(false);
-        localStorage.setItem('userId', data?.id);
-        localStorage.setItem('email', data?.email);
-        localStorage.setItem('token', data?.token);
-        history.replace('/');
-      });
-      socket?.on('unathorized', (err) => {
-        console.log(err);
-        setIsDisabled(false);
-      });
+      axios
+        .post<{ id: number; email: string; token: string }>('/register', request)
+        .then((res: AxiosResponse<{ id: number; email: string; token: string }>) => {
+          setIsDisabled(false);
+          localStorage.setItem('userId', res.data?.id.toString());
+          localStorage.setItem('email', res.data?.email);
+          localStorage.setItem('token', res.data?.token);
+          history.replace('/cats');
+        })
+        .catch(() => {
+          setIsDisabled(false);
+        });
+    } else {
+      setIsDisabled(false);
     }
-    setIsDisabled(false);
   };
 
   const handleChangeInput = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {

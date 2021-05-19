@@ -11,8 +11,27 @@
     height: 20px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
+
+    & h4 {
+      font-weight: 400;
+      font-family: 'Roboto', sans-serif;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &__titles {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & h3 {
+      font-weight: 500;
+      font-family: 'Roboto', sans-serif;
+    }
   }
 }
 

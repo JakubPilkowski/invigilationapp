@@ -72,7 +72,7 @@ const Cats = () => {
   useEffect(() => {
     updateEvent(
       debouncedValue !== ''
-        ? `Wpisał/-a '${debouncedValue}' w wyszukiwarce kotków`
+        ? `Wpisał/-a ${debouncedValue} w wyszukiwarce kotków`
         : 'Wyczyścił/-a filtrowanie kotków'
     );
     setList(

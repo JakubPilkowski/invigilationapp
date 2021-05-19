@@ -1,17 +1,15 @@
 export type ActivityType = {
-  id: string;
+  id: number;
   page: string;
   event: string;
-  eventDate: string;
+  date: string;
 };
 
 export type UserType = {
-  id: string;
+  id: number;
   username?: string;
   email?: string;
   avatar?: string;
-  status: {
-    state: string;
-    lastInteraction: string;
-  };
+  status: string;
+  lastEventDate: string;
 };

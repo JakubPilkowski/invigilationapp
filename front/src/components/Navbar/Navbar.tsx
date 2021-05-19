@@ -6,9 +6,6 @@ import './Navbar.scss';
 const Navbar = () => {
   return (
     <div className="Navbar">
-      <NavLink to="/" exact className="Navbar__link" activeClassName="Navbar__link--active">
-        Główna
-      </NavLink>
       <NavLink to="/cats" exact className="Navbar__link" activeClassName="Navbar__link--active">
         Kotki
       </NavLink>

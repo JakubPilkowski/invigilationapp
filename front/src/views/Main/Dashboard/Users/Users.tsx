@@ -1,7 +1,8 @@
-import React, { memo, useCallback, useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { IconButton } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
 import { useHistory } from 'react-router';
+
 import { SocketContext } from 'utils/SocketProvider';
 
 import User from './User';
@@ -12,6 +13,7 @@ import './Users.scss';
 const Users = () => {
   const history = useHistory();
   const socket = useContext(SocketContext);
+
   const [users, setUsers] = useState<UserType[]>([]);
 
   const handleLogout = () => {
@@ -20,34 +22,32 @@ const Users = () => {
     history.replace('/login');
   };
 
-  const handleUpdateUsers = useCallback((resp) => {
-    console.log(resp);
-    setUsers(resp);
-  }, []);
-
-  const handleChangeStatus = useCallback((resp) => {
-    console.log(resp);
-    setUsers((lastUsers) =>
-      lastUsers.map((user) =>
-        user.id !== resp.id
-          ? {
-              ...user,
-              status: resp.status,
-            }
-          : user
-      )
+  const handleFetchUsers = (resp: UserType[]) => {
+    setUsers(
+      resp.filter((usr) => usr.id !== Number.parseInt(localStorage.getItem('userId') || '0'))
     );
-  }, []);
+  };
 
-  // useEffect(() => {
-  //   socket?.emit('users', localStorage.getItem('userId'));
-  //   socket?.on('get_users', handleUpdateUsers);
-  //   socket?.on('change_status', handleChangeStatus);
-  //   return () => {
-  //     socket?.off('get_users', handleUpdateUsers);
-  //     socket?.off('change_status', handleChangeStatus);
-  //   };
-  // }, [socket]);
+  // const handleChangeStatus = useCallback((resp) => {
+  //   console.log(resp);
+  //   setUsers((lastUsers) =>
+  //     lastUsers.map((user) =>
+  //       user.id !== resp.id
+  //         ? {
+  //             ...user,
+  //             status: resp.status,
+  //           }
+  //         : user
+  //     )
+  //   );
+  // }, []);
+
+  useEffect(() => {
+    socket?.on('getUsers', handleFetchUsers);
+    return () => {
+      // socket?.off('getUsers', handleFetchUsers);
+    };
+  }, [socket]);
 
   return (
     <div className="Users">
@@ -57,7 +57,7 @@ const Users = () => {
         </IconButton>
         <h2>Użytkownicy</h2>
       </header>
-      {users.map((user: UserType) => {
+      {users?.map((user: UserType) => {
         return <User user={user} key={user.id} />;
       })}
     </div>

@@ -1,19 +1,17 @@
-import React, { createContext, useEffect, useRef } from 'react';
+import React, { createContext, memo } from 'react';
 import socketIOClient, { Socket } from 'socket.io-client';
-const server = 'http://localhost:8000';
+
+export const socketServer = 'http://localhost:8000';
 
 export const SocketContext = createContext<Socket | null>(null);
 
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const socket = socketIOClient(server);
-
-  // useEffect(() => {
-  //   socket.open();
-  //   return () => {
-  //     socket.close();
-  //   };
-  // }, []);
+  const socket = socketIOClient(socketServer, {
+    auth: {
+      token: localStorage.getItem('token'),
+    },
+  });
   return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
 };
 
-export default SocketProvider;
+export default memo(SocketProvider);

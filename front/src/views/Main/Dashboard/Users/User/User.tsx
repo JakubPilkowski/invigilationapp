@@ -28,24 +28,28 @@ function getRandomBorderRadius() {
   };
 }
 
-const User = ({ user: { id, username, email, avatar, status } }: { user: UserType }) => {
+const User = ({
+  user: { id, username, email, avatar, status, lastEventDate },
+}: {
+  user: UserType;
+}) => {
   const [isExpanded, toggleExpand] = useToggle(false);
   const [dynamicStatus, setDynamicStatus] = useState('');
   const borderStyle = useMemo(getRandomBorderRadius, []);
   const classes = classNames('User', { 'User--active': isExpanded });
 
   const imgSrc =
-    avatar !== '' ? `http://localhost:8000/${avatar}` : '/static/images/img-placeholder.png';
+    avatar !== '' ? `http://localhost:3000${avatar}` : '/static/images/img-placeholder.png';
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDynamicStatus(getDynamicStatus(status.state, status.lastInteraction));
+      setDynamicStatus(getDynamicStatus(status, lastEventDate));
     }, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [status]);
+  }, [status, lastEventDate]);
 
   return (
     <div className={classes}>
@@ -60,7 +64,7 @@ const User = ({ user: { id, username, email, avatar, status } }: { user: UserTyp
         <h3 className="typography">{dynamicStatus}</h3>
       </div>
       <ButtonBase className="more_button" onClick={toggleExpand}>
-        Więcej
+        Podglądaj
       </ButtonBase>
       <Activities isExpanded={isExpanded} id={id} />
     </div>
